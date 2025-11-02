@@ -1,14 +1,20 @@
 services:
+  # Service 1: The Web Interface (Flask App)
   - type: web
-    name: telegram-copier
+    name: telegram-manager-ui
     env: python
     plan: free
-    
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn main:app"
-    
-    # The 'disks' section has been completely removed.
-    
+    startCommand: "gunicorn app:app"
+    # The web service does not need access to secrets
+
+  # Service 2: The Telegram Bot (Telethon Worker)
+  - type: worker
+    name: telegram-copier-bot
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python bot.py"
     envVars:
       - key: API_ID
         sync: false
@@ -16,4 +22,3 @@ services:
         sync: false
       - key: SESSION_STRING
         sync: false
-      # The RENDER_DISK_PATH variable is also removed as it's no longer needed.
