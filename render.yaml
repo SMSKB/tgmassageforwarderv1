@@ -1,0 +1,30 @@
+services:
+  # This defines our single service that runs the web UI and the bot.
+  - type: web
+    name: telegram-copier
+    env: python
+    plan: free # Use Render's free tier
+    
+    # Commands to set up the project
+    buildCommand: "pip install -r requirements.txt"
+    
+    # The command to start the application in production
+    startCommand: "gunicorn main:app"
+    
+    # This creates a small, persistent disk to store your channels.json file
+    disks:
+      - name: data-disk
+        mountPath: /app/data # This folder path is where the disk will be available
+        sizeGB: 1
+        
+    # Define the secret keys (environment variables) that we will set in the dashboard
+    envVars:
+      - key: API_ID
+        sync: false # 'sync: false' means we will add the value manually
+      - key: API_HASH
+        sync: false
+      - key: SESSION_STRING
+        sync: false
+      # Tell our app where the persistent disk is mounted
+      - key: RENDER_DISK_PATH
+        value: /app/data

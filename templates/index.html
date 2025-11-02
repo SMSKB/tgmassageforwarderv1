@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Telegram Copier Management</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; background-color: #f4f4f9; color: #333; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        ul { list-style-type: none; padding: 0; }
+        li { border: 1px solid #ddd; margin-bottom: 5px; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-radius: 4px; }
+        a { color: #d9534f; text-decoration: none; font-weight: bold; }
+        form { border: 1px solid #ddd; padding: 15px; margin-top: 20px; border-radius: 4px; }
+        input, select, button { padding: 10px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
+        button { background-color: #5cb85c; color: white; border-color: #4cae4c; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Channels</h1>
+        <h2>Source Channels (Copy From)</h2>
+        <ul>
+            {% for channel_id in source_channels %}
+            <li><span>{{ channel_id }}</span><a href="{{ url_for('delete_channel', channel_type='source', channel_id_str=channel_id) }}">Delete</a></li>
+            {% endfor %}
+        </ul>
+        <h2>Destination Channels (Send To)</h2>
+        <ul>
+            {% for channel_id in destination_channels %}
+            <li><span>{{ channel_id }}</span><a href="{{ url_for('delete_channel', channel_type='destination', channel_id_str=channel_id) }}">Delete</a></li>
+            {% endfor %}
+        </ul>
+        <h2>Add New Channel</h2>
+        <form action="/add_channel" method="post">
+            <input type="number" name="channel_id" placeholder="Channel ID (e.g., -100...)" required>
+            <select name="channel_type" required>
+                <option value="source">Source</option>
+                <option value="destination">Destination</option>
+            </select>
+            <button type="submit">Add Channel</button>
+        </form>
+    </div>
+</body>
+</html>
